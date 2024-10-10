@@ -1,0 +1,6 @@
+@BuscaVeiculosAPI_HostAddress = http://localhost:5198
+
+GET {{BuscaVeiculosAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
