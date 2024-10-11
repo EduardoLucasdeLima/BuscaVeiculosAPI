@@ -1,25 +1,29 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BuscaVeiculosAPI.Models;
-
-[Table("Veiculos")]
 
 public class Veiculo
 {
     [Key]
-    public int VeiculoId { get; set; } // Chave primária
-    [Required]
-    [StringLength(50)]
-    public string? Nome { get; set; }
+    public int Id { get; set; }
 
     [Required]
-    [StringLength(50)]
-    public string? Placa { get; set; }
+    [StringLength(100)]
+    public string NomeCarro { get; set; }
 
     [Required]
-    [StringLength(300)]
-    public string? ImagemUrl { get; set; }
+    [StringLength(7)]
+    public string PlacaCarro { get; set; }
+
+    [StringLength(500)]
+    public string DescricaoCarro { get; set; }
+
+    [Url]
+    public string ImagemUrl { get; set; }
+
+    [Required]
     public int CategoriaId { get; set; }
-    public Categoria? Categoria { get; set; }
+
+    // Propriedade de navegação para a categoria
+    public virtual Categoria Categoria { get; set; }
 }
