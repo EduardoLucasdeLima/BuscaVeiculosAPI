@@ -19,7 +19,7 @@ public class VeiculoController : ControllerBase
     [HttpGet]
     public ActionResult<IEnumerable<Veiculo>> Get()
     {
-        var veiculos = _context.Veiculos.ToList();
+        var veiculos = _context.Veiculos.AsNoTracking().ToList();
         if (veiculos is null)
         {
             return NotFound("Veiculo não encontrado.");
@@ -30,7 +30,7 @@ public class VeiculoController : ControllerBase
     [HttpGet("{id:int}", Name = "ObterVeiculo")]
     public ActionResult<Veiculo> Get(int id)
     {
-        var veiculo = _context.Veiculos.FirstOrDefault(c => c.Id == id);
+        var veiculo = _context.Veiculos.AsNoTracking().FirstOrDefault(c => c.Id == id);
         if (veiculo is null)
         {
             return NotFound("Veiculo não encontrado.");
@@ -73,7 +73,7 @@ public class VeiculoController : ControllerBase
 
         if(veiculo is null)
         {
-            return NotFound("Veiculo não localizado");
+            return NotFound($"Veiculo com id={id}não localizado");
         }
         _context.Veiculos.Remove(veiculo);
         _context.SaveChanges();

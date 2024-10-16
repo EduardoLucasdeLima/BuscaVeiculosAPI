@@ -18,21 +18,25 @@ public class CategoriaController : ControllerBase
         _context = context;
     }
 
+    [HttpGet("veiculos")]
+    public ActionResult<IEnumerable<Categoria>> GetCategoriasVeiculos()
+    {
+        return _context.Categorias.Include(v => v.Veiculos).Where(c => c.Id <= 5).ToList();
+    }
+    
+    
     [HttpGet]
     public ActionResult<IEnumerable<Categoria>> Get()
     {
-        var categorias = _context.Categorias.ToList();
-        if (categorias is null)
         {
-            return NotFound("Categoria não encontrada.");
+            return _context.Categorias.AsNoTracking().ToList();
         }
-        return categorias;
     }
 
     [HttpGet("{id:int}", Name = "ObterCategoria")]
     public ActionResult<Categoria> Get(int id)
     {
-        var categoria = _context.Categorias.FirstOrDefault(c => c.Id == id);
+        var categoria = _context.Categorias.AsNoTracking().FirstOrDefault(c => c.Id == id);
         if (categoria is null)
         {
             return NotFound("Categoria não encontrada.");
@@ -74,7 +78,7 @@ public class CategoriaController : ControllerBase
 
         if (categoria is null)
         {
-            return NotFound("Categoria não encontrada.");
+            return NotFound($"Categoria com id={id} não encontrada.");
         }
         _context.Categorias.Remove(categoria);
         _context.SaveChanges();

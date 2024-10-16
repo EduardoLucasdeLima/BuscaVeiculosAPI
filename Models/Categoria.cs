@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace BuscaVeiculosAPI.Models;
 
@@ -9,14 +10,14 @@ public class Categoria
 
     [Required]
     [StringLength(100)]
-    public string ModeloCarro { get; set; }
+    public string? ModeloCarro { get; set; }
 
     [StringLength(500)]
-    public string DescricaoCarro { get; set; }
+    public string? DescricaoCarro { get; set; }
 
     [Url]
-    public string ImagemUrl { get; set; }
+    public string? ImagemUrl { get; set; }
 
-    // Propriedade de navegação para os veículos
+    [JsonIgnore]
     public virtual ICollection<Veiculo> Veiculos { get; set; } = new List<Veiculo>();
 }
