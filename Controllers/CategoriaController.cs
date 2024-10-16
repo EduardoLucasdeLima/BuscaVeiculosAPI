@@ -2,6 +2,7 @@
 using BuscaVeiculosAPI.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BuscaVeiculosAPI.Controllers;
 
@@ -21,18 +22,18 @@ public class CategoriaController : ControllerBase
     public ActionResult<IEnumerable<Categoria>> Get()
     {
         var categorias = _context.Categorias.ToList();
-        if(categorias is null) 
+        if (categorias is null)
         {
             return NotFound("Categoria não encontrada.");
         }
         return categorias;
     }
 
-    [HttpGet("{id:int}", Name="ObterCategoria")]
+    [HttpGet("{id:int}", Name = "ObterCategoria")]
     public ActionResult<Categoria> Get(int id)
     {
         var categoria = _context.Categorias.FirstOrDefault(c => c.Id == id);
-        if ( categoria is null)
+        if (categoria is null)
         {
             return NotFound("Categoria não encontrada.");
         }
@@ -50,6 +51,35 @@ public class CategoriaController : ControllerBase
 
         return new CreatedAtRouteResult("ObterCategoria",
             new { id = categoria.Id }, categoria);
+    }
+
+    [HttpPut("{id:int}")]
+    public ActionResult Put(int id, Categoria categoria)
+    {
+        if(id != categoria.Id)
+        {
+            return BadRequest();
+        }
+        _context.Entry(categoria).State = EntityState.Modified;
+        _context.SaveChanges();
+
+        return Ok(categoria);
+
+    }
+
+    [HttpDelete("{id:int}")]
+    public ActionResult Delete(int id)
+    {
+        var categoria = _context.Categorias.FirstOrDefault(v => v.Id == id);
+
+        if (categoria is null)
+        {
+            return NotFound("Categoria não encontrada.");
+        }
+        _context.Categorias.Remove(categoria);
+        _context.SaveChanges();
+
+        return Ok(categoria);
     }
 
 

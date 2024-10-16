@@ -2,6 +2,7 @@
 using BuscaVeiculosAPI.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BuscaVeiculosAPI.Controllers;
 
@@ -48,6 +49,36 @@ public class VeiculoController : ControllerBase
 
         return new CreatedAtRouteResult("ObterVeiculo",
             new { id = veiculo.Id }, veiculo);
+    }
+
+    [HttpPut("{id:int}")]
+    public ActionResult Put(int id, Veiculo veiculo)
+    {
+        if(id != veiculo.Id)
+        {
+            return BadRequest();
+        }
+
+        _context.Entry(veiculo).State = EntityState.Modified;
+        _context.SaveChanges();
+
+        return Ok(veiculo);
+
+    }
+
+    [HttpDelete("{id:int}")]
+    public ActionResult Delete(int id)
+    {
+        var veiculo = _context.Veiculos.FirstOrDefault(v => v.Id == id);
+
+        if(veiculo is null)
+        {
+            return NotFound("Veiculo não localizado");
+        }
+        _context.Veiculos.Remove(veiculo);
+        _context.SaveChanges();
+
+        return Ok(veiculo);
     }
 
 }
